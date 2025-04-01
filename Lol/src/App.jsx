@@ -7,62 +7,63 @@ function App() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      try {
-        const res = await fetch('https://fakestoreapi.com/products');
-        const data = await res.json();
-        setProducts(data);
-      } catch (error) {
-        console.error('Erreur lors du fetch :', error);
-      }
+      const res = await fetch('https://fakestoreapi.com/products');
+      const data = await res.json();
+      setProducts(data);
     };
 
     fetchProducts();
   }, []);
 
   const handleAddProduct = async () => {
-    try {
-      const response = await fetch('https://fakestoreapi.com/products', {
-        method: 'POST',
-        body: JSON.stringify({
-          title: 'Produit fictif',
-          price: 29.99,
-          description: 'Ceci est un produit factice pour test',
-          image: 'https://via.placeholder.com/150',
-          category: 'test',
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    const response = await fetch('https://fakestoreapi.com/products', {
+      method: 'POST',
+      body: JSON.stringify({
+        title: 'Produit fictif',
+        price: 29.99,
+        description: 'Ceci est un produit factice pour test',
+        image: 'https://via.placeholder.com/150',
+        category: 'test',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-      const data = await response.json();
-      alert(`Le produit avec l'id ${data.id} a été créé`);
-    } catch (error) {
-      console.error('Erreur lors de la création :', error);
-    }
+    const data = await response.json();
+    alert(`Le produit avec l'id ${data.id} a été créé`);
   };
 
   const handleUpdateProduct = async (id) => {
-    try {
-      const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-          title: 'Produit modifié',
-          price: 49.99,
-          description: 'Ceci est une mise à jour complète du produit',
-          image: 'https://via.placeholder.com/200',
-          category: 'modifié',
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        title: 'Produit modifié',
+        price: 49.99,
+        description: 'Ceci est une mise à jour complète du produit',
+        image: 'https://via.placeholder.com/200',
+        category: 'modifié',
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-      const data = await response.json();
-      alert(`Le produit avec l'id ${data.id} a été modifié`);
-    } catch (error) {
-      console.error('Erreur lors de la modification :', error);
-    }
+    const data = await response.json();
+    alert(`Le produit avec l'id ${data.id} a été modifié`);
+  };
+
+  const handlePartialUpdate = async (id) => {
+    const response = await fetch(`https://fakestoreapi.com/products/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ price: 5 }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+    alert(`Le prix du produit avec l'id ${data.id} a été modifié`);
   };
 
   return (
@@ -82,8 +83,15 @@ function App() {
                 <Button
                   variant="warning"
                   onClick={() => handleUpdateProduct(product.id)}
+                  className="mb-2"
                 >
                   Modifier le produit complet
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={() => handlePartialUpdate(product.id)}
+                >
+                  Modifie le prix du produit
                 </Button>
               </Card.Body>
             </Card>
