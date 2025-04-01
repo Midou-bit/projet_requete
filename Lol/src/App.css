@@ -40,3 +40,27 @@
 .read-the-docs {
   color: #888;
 }
+
+
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.image-container {
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.product-image {
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+}

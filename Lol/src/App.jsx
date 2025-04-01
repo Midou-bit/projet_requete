@@ -1,27 +1,32 @@
 import { useEffect, useState } from 'react';
 import { Card, Container, Row, Col } from 'react-bootstrap';
+import './App.css';
 
 function App() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
-      .then(res => res.json())
-      .then(data => setProducts(data));
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('https://fakestoreapi.com/products');
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error('Erreur lors du fetch :', err);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   return (
     <Container className="mt-4">
-      <Row xs={1} md={3} className="g-4">
+      <Row>
         {products.map(product => (
-          <Col key={product.id}>
-            <Card style={{ height: '100%' }}>
-              <div style={{ height: '200px', display: 'flex', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' }}>
-                <Card.Img 
-                  variant="top" 
-                  src={product.image} 
-                  style={{ maxHeight: '100%', width: 'auto', objectFit: 'contain' }} 
-                />
+          <Col xs={1} md={3} key={product.id}>
+            <Card className="h-100">
+              <div className="image-container">
+                <Card.Img variant="top" src={product.image} className="product-image" />
               </div>
               <Card.Body>
                 <Card.Title>{product.title}</Card.Title>
