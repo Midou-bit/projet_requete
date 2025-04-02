@@ -4,20 +4,21 @@ import './App.css';
 
 function App() {
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true);
-      setError(false);
       try {
         const res = await fetch('https://fakestoreapi.com/products');
+        if (!res.ok) {
+          throw new Error(`Erreur HTTP : ${res.status} - ${res.statusText}`);
+        }
         const data = await res.json();
         setProducts(data);
       } catch (err) {
-        setError(true);
-        console.error('erreur lors du chargement des produits :', err);
+        setError("Une erreur est survenue lors du chargement des produits.");
+        console.error("Erreur fetch produits :", err.message);
       } finally {
         setLoading(false);
       }
@@ -42,11 +43,15 @@ function App() {
         },
       });
 
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP : ${response.status}`);
+      }
+
       const data = await response.json();
       alert(`Le produit avec l'id ${data.id} a été créé`);
     } catch (err) {
-      alert("erreur survenue.");
-      console.error('Erreur lors de la création :', err);
+      alert("Une erreur est survenue lors de la création du produit.");
+      console.error("Erreur création produit :", err.message);
     }
   };
 
@@ -66,11 +71,15 @@ function App() {
         },
       });
 
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP : ${response.status}`);
+      }
+
       const data = await response.json();
       alert(`Le produit avec l'id ${data.id} a été modifié`);
     } catch (err) {
-      alert("erreur survenue.");
-      console.error('Erreur lors de la modification :', err);
+      alert("Une erreur est survenue lors de la modification du produit.");
+      console.error("Erreur modification complète :", err.message);
     }
   };
 
@@ -84,11 +93,15 @@ function App() {
         },
       });
 
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP : ${response.status}`);
+      }
+
       const data = await response.json();
       alert(`Le prix du produit avec l'id ${data.id} a été modifié`);
     } catch (err) {
-      alert("erreur survenue.");
-      console.error('Erreur lors du changement de prix :', err);
+      alert("Une erreur est survenue lors de la modification du prix.");
+      console.error("Erreur patch prix :", err.message);
     }
   };
 
@@ -98,11 +111,15 @@ function App() {
         method: 'DELETE',
       });
 
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP : ${response.status}`);
+      }
+
       const data = await response.json();
       alert(`Le produit avec l'id ${data.id} a été supprimé`);
     } catch (err) {
-      alert("erreur survenue.");
-      console.error('Erreur lors de la supression :', err);
+      alert("Une erreur est survenue lors de la suppression du produit.");
+      console.error("Erreur suppression :", err.message);
     }
   };
 
@@ -113,7 +130,7 @@ function App() {
       </Button>
 
       {loading && <Spinner animation="border" />}
-      {error && <Alert variant="danger">erreur lors du chargement des produit.</Alert>}
+      {error && <Alert variant="danger">{error}</Alert>}
 
       <Row className="g-4">
         {products.map(product => (
